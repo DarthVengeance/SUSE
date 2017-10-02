@@ -1,4 +1,4 @@
-FROM suse/sles12sp2:latest
+FROM suse/opensuse:latest
 
-RUN zypper ref -s
+#RUN zypper ref -s
 RUN zypper -n in vim
