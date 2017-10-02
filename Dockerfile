@@ -1,4 +1,2 @@
-FROM suse/opensuse:latest
-
-#RUN zypper ref -s
-RUN zypper -n in vim
+FROM opensuse/amd64:42.1
+zypper -n in vim
