@@ -1,3 +1,4 @@
 FROM suse/sles11sp3:latest
 RUN zypper --gpg-auto-import-keys ref -s
-RUN zypper -n in python python-xml
+RUN zypper -n in python
+RUN zypper -n in python-xml
