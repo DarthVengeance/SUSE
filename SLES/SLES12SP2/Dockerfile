@@ -1,26 +1,3 @@
-FROM registry.scc.suse.de/suse/sles12:sp2
-ENV BUILT_AT "Tue May 9 14:46 CET 2017"
-
-# Remember to drop docker caches if any of these change
-RUN zypper --non-interactive ar http://download.suse.de/ibs/SUSE/Products/SLE-SERVER/12-SP2/x86_64/product/ SLE-12-SP2-standard &&\
-    zypper ar -f http://download.suse.de/ibs/SUSE/Updates/SLE-SERVER/12-SP2/x86_64/update/ SLE-12-SP2-updates &&\
-    zypper ar http://download.suse.de/ibs/SUSE/Products/SLE-SDK/12-SP2/x86_64/product/ sle12sp2sdk &&\
-    zypper ar http://download.suse.de/ibs/SUSE/Updates/SLE-SDK/12-SP2/x86_64/update/ sle12sp2sdk-updates &&\
-    zypper ar -f http://download.opensuse.org/repositories/openSUSE:/Tools/SLE_12_SP2/ opensuse-tools && \
-    zypper --non-interactive --gpg-auto-import-keys ref &&\
-    zypper --non-interactive up zypper &&\
-    zypper --non-interactive install git-core ruby-devel make gcc gcc-c++ build wget dmidecode vim zypper>=1.11.32 osc ruby2.1-rubygem-gem2rpm hwinfo libx86emu1 zypper-migration-plugin
-
-RUN echo 'gem: --no-ri --no-rdoc' > /etc/gemrc && \
-    gem install bundler --no-document
-RUN mkdir /tmp/connect && mkdir -p /tmp/connect/lib/suse/connect
-ADD Gemfile /tmp/connect/
-ADD suse-connect.gemspec /tmp/connect/
-ADD lib/suse/connect/version.rb /tmp/connect/lib/suse/connect/
-WORKDIR /tmp/connect
-RUN bundle config jobs $(nproc) && \
-    bundle install
-RUN wget http://username:password@gaffer.suse.de:9999/files/.regcode -O /root/.regcode
-RUN wget --http-user=username --http-password=password http://gaffer.suse.de:9999/files/.oscrc -O /root/.oscrc
-ADD . /tmp/connect
-RUN chown -R nobody /tmp/connect
+FROM suse/sles12sp2:latest
+RUN zypper --gpg-auto-import-keys ref -s
+RUN zypper -n in python python-xml
