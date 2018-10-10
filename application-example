@@ -1,7 +1,7 @@
 FROM registry.suse.com/suse/sle15 
 MAINTAINER tux 
 
-ADD etc/ /etc/zypp/ 
+ADD /etc/zypp/repos.d /etc/zypp/services.d
 RUN zypper refs && zypper refresh 
 RUN zypper --non-interactive in apache2 
 
